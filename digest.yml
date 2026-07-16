@@ -1,0 +1,68 @@
+# ═══════════════════════════════════════════════════════════════════
+#  Morning digest — runs every day, emails you, archives the result.
+#
+#  Secrets to add (repo → Settings → Secrets and variables → Actions):
+#    SMTP_USER       your Gmail address
+#    SMTP_PASSWORD   a Gmail App Password (16 chars, from Google
+#                    Account → Security → 2-Step Verification → App
+#                    passwords). Never your real password.
+#    DIGEST_TO       recipient address (can equal SMTP_USER)
+#
+#  Phase 3 will add:  GROQ_API_KEY
+# ═══════════════════════════════════════════════════════════════════
+
+name: morning-digest
+
+on:
+  schedule:
+    # GitHub cron is UTC. 05:00 UTC = 08:00 in Türkiye (UTC+3, no DST).
+    # Note: scheduled runs can start up to ~15–30 min late under load —
+    # normal Actions behavior, not a bug in your workflow.
+    - cron: "0 5 * * *"
+  workflow_dispatch: {}   # adds a "Run workflow" button for manual testing
+
+permissions:
+  contents: write         # needed to commit the archived digest back
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build digest
+        env:
+          # Phase 3: LLM ranking. Optional — without the key the digest
+          # is generated unranked. Get a free key at console.groq.com.
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python digest.py
+
+      - name: Email digest
+        env:
+          SMTP_HOST: smtp.gmail.com
+          SMTP_PORT: "587"
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          DIGEST_TO: ${{ secrets.DIGEST_TO }}
+        run: python emailer.py
+
+      - name: Commit digest to archive
+        run: |
+          git config user.name "digest-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add out/
+          # Commit only if something changed; a no-op commit fails the job
+          git diff --cached --quiet || git commit -m "digest: $(date -u +%F)"
+          git push

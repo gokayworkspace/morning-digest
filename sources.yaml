@@ -1,0 +1,110 @@
+# ═══════════════════════════════════════════════════════════════════
+#  sources.yaml — the only file you should need to touch day-to-day.
+#  Add/remove feeds here; digest.py never needs to change.
+#
+#  Each section:
+#    title:      heading in the digest
+#    max_items:  cap after dedupe + sorting
+#    feeds:      list of RSS/Atom sources (type: rss)
+#                or special sources (type: hackernews / fx_rates / reddit)
+#    max_age_hours: ignore items older than this (default 26)
+# ═══════════════════════════════════════════════════════════════════
+
+sections:
+
+  - title: "🌍 World"
+    max_items: 6
+    feeds:
+      - type: rss
+        name: BBC World
+        url: http://feeds.bbci.co.uk/news/world/rss.xml
+      - type: rss
+        name: Guardian World
+        url: https://www.theguardian.com/world/rss
+
+  - title: "🔥 Hacker News"
+    max_items: 8
+    max_age_hours: 48   # front-page stories are often submitted 1-2 days ago
+    feeds:
+      - type: hackernews
+        name: HN Front Page
+        min_points: 100          # raise this if the section feels noisy
+
+  - title: "🤖 Robotics & Embedded"
+    max_items: 6
+    max_age_hours: 48   # IEEE Spectrum posts infrequently; don't starve the section
+    feeds:
+      - type: rss
+        name: IEEE Spectrum Robotics
+        url: https://spectrum.ieee.org/feeds/topic/robotics.rss
+      - type: rss
+        name: Hackaday
+        url: https://hackaday.com/feed/
+      - type: rss
+        name: CNX Software
+        url: https://www.cnx-software.com/feed/
+
+  - title: "🧠 AI"
+    max_items: 6
+    feeds:
+      - type: rss
+        name: TechCrunch AI
+        url: https://techcrunch.com/category/artificial-intelligence/feed/
+      - type: rss
+        name: MIT Tech Review
+        url: https://www.technologyreview.com/feed/
+
+  - title: "🇳🇱 Netherlands"
+    max_items: 5
+    feeds:
+      - type: rss
+        name: NL Times
+        url: https://nltimes.nl/rss
+      - type: rss
+        name: DutchNews
+        url: https://www.dutchnews.nl/feed/
+
+  - title: "📈 Markets"
+    max_items: 5
+    feeds:
+      - type: fx_rates
+        name: FX
+        base: EUR
+        symbols: [TRY, USD]      # EUR→TRY and EUR→USD each morning
+      - type: rss
+        name: CNBC Markets
+        url: https://www.cnbc.com/id/100003114/device/rss/rss.html
+
+  - title: "🖨️ 3D Printing — useful prints & news"
+    max_items: 6
+    feeds:
+      - type: hackernews
+        name: HN · 3D printing
+        query: "3D printing"     # community-upvoted stories on the topic
+        min_points: 10
+        since_hours: 48
+      - type: rss
+        name: Hackaday 3D
+        url: https://hackaday.com/category/3d-printer-hacks/feed/
+      - type: rss
+        name: 3D Printing Industry
+        url: https://3dprintingindustry.com/feed
+      - type: rss
+        name: 3DPrint.com
+        url: https://3dprint.com/feed
+
+  - title: "🚀 Innovation & Startups"
+    max_items: 5
+    feeds:
+      - type: rss
+        name: TechCrunch Startups
+        url: https://techcrunch.com/category/startups/feed/
+      - type: rss
+        name: Ars Technica
+        url: https://feeds.arstechnica.com/arstechnica/index
+
+settings:
+  exclude_keywords: ["(sponsored)", "sponsored post", "[advertisement]"]
+  max_age_hours: 26        # "since yesterday morning", with margin
+  request_timeout: 15      # seconds per feed
+  user_agent: "morning-digest/0.1 (personal news script)"
