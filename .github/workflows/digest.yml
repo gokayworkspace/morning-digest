@@ -65,4 +65,10 @@ jobs:
           git add out/
           # Commit only if something changed; a no-op commit fails the job
           git diff --cached --quiet || git commit -m "digest: $(date -u +%F)"
+          # The checkout happened minutes ago; if anyone pushed since
+          # (e.g. you, editing sources.yaml), our snapshot is stale and
+          # the push would be rejected. Rebase onto latest main first —
+          # the bot only ever touches out/, so conflicts are impossible
+          # unless you also hand-committed an out/ file.
+          git pull --rebase origin main
           git push
