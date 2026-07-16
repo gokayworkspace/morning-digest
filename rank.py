@@ -62,6 +62,12 @@ Your job:
    it isn't thrilling. Only leave a section empty if genuinely nothing
    qualifies. Aim for 15-25 kept items in total. Add a short "why"
    (max 12 words) ONLY when the relevance isn't obvious from the title.
+   EXCEPTION — a section whose title contains "Radar" works the opposite
+   way: keep items ONLY if genuinely striking for this reader per the
+   profile's radar criteria (0-3 items); an empty Radar section is the
+   normal, expected outcome most days. Radar items do not count toward
+   the 15-25 target. A truly major radar story (e.g. big ASML news)
+   should also be a highlight.
 3. "rabbit_hole": ONE item that would reward 15+ minutes of reading —
    prefer deep technical write-ups. Include a one-line "why".
 

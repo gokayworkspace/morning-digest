@@ -103,6 +103,23 @@ sections:
         name: Ars Technica
         url: https://feeds.arstechnica.com/arstechnica/index
 
+  - title: "📡 Radar — only when something strikes"
+    max_items: 4
+    max_age_hours: 48
+    feeds:
+      - type: rss
+        name: Home Assistant Blog
+        url: https://www.home-assistant.io/atom.xml
+      - type: rss
+        name: MacRumors
+        url: https://feeds.macrumors.com/MacRumors-All
+      - type: rss
+        name: Bits & Chips
+        url: https://bits-chips.com/feed/
+      - type: rss
+        name: Semiconductor Engineering
+        url: https://semiengineering.com/feed/
+
 settings:
   exclude_keywords: ["(sponsored)", "sponsored post", "[advertisement]"]
   max_age_hours: 26        # "since yesterday morning", with margin
