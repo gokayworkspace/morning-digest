@@ -22,7 +22,7 @@ sections:
         name: Guardian World
         url: https://www.theguardian.com/world/rss
 
-  - title: "🔥 Hacker News"
+  - title: "👨🏻‍💻 Hacker News"
     max_items: 8
     max_age_hours: 48   # front-page stories are often submitted 1-2 days ago
     feeds:
@@ -75,23 +75,18 @@ sections:
         name: CNBC Markets
         url: https://www.cnbc.com/id/100003114/device/rss/rss.html
 
-  - title: "🖨️ 3D Printing — useful prints & news"
+  - title: "🖨️ Print tonight — useful things"
     max_items: 6
+    max_age_hours: 336        # models trend for weeks; don't over-filter by age
     feeds:
-      - type: hackernews
-        name: HN · 3D printing
-        query: "3D printing"     # community-upvoted stories on the topic
-        min_points: 10
-        since_hours: 48
-      - type: rss
-        name: Hackaday 3D
-        url: https://hackaday.com/category/3d-printer-hacks/feed/
-      - type: rss
-        name: 3D Printing Industry
-        url: https://3dprintingindustry.com/feed
-      - type: rss
-        name: 3DPrint.com
-        url: https://3dprint.com/feed
+        - type: printables
+          name: Printables trending
+          url: https://dyn.tedder.me/rss/printables/trending.json
+          min_downloads: 300
+        - type: printables
+          name: Printables top-rated
+          url: https://dyn.tedder.me/rss/printables/top_rated.json
+          min_downloads: 300
 
   - title: "🚀 Innovation & Startups"
     max_items: 5

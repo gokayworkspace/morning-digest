@@ -287,6 +287,50 @@ def fetch_fx_rates(feed_cfg: dict, settings: dict) -> list[dict]:
     return items
 
 
+def fetch_printables(feed_cfg: dict, settings: dict) -> list[dict]:
+    """JSON Feed parser for the tedder.me Printables feeds — surfaces
+    actual printable models (useful home things), with download/like
+    counts as the quality signal. Not RSS, so it needs its own parser."""
+    import re
+    name = feed_cfg.get("name", "Printables")
+    min_downloads = feed_cfg.get("min_downloads", 0)
+    try:
+        resp = requests.get(
+            feed_cfg["url"],
+            timeout=settings.get("request_timeout", 15),
+            headers={"User-Agent": settings.get("user_agent", "morning-digest")})
+        resp.raise_for_status()
+        data = resp.json()
+    except Exception as e:  # noqa: BLE001
+        _log(f"{name}: FAILED ({e})")
+        return []
+    items = []
+    for it in data.get("items", []):
+        html = it.get("content_html", "")
+        likes = downloads = 0
+        m = re.search(r"([\d,]+)\s+likes,\s+([\d,]+)\s+downloads", html)
+        if m:
+            likes = int(m.group(1).replace(",", ""))
+            downloads = int(m.group(2).replace(",", ""))
+        if downloads < min_downloads:
+            continue
+        pub = None
+        if it.get("date_published"):
+            try:
+                pub = datetime.fromisoformat(
+                    it["date_published"].replace("Z", "+00:00"))
+            except ValueError:
+                pass
+        items.append({
+            "title": it.get("title", "").strip(),
+            "url": it.get("url", ""),
+            "source": name,
+            "published": pub,
+            "extra": f"⬇{downloads} ♥{likes}" if downloads else None,
+        })
+    _log(f"{name}: {len(items)} models")
+    return items
+
 # ── Dispatch table: config `type` → function ─────────────────────────
 # Adding a new source type = write a function + one line here.
 
@@ -296,4 +340,5 @@ FETCHERS = {
     "reddit_json": fetch_reddit_json,
     "hackernews": fetch_hackernews,
     "fx_rates": fetch_fx_rates,
+    "printables": fetch_printables,
 }

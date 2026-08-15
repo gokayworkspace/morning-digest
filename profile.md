@@ -22,8 +22,7 @@ daily Home Assistant power user with an Elegoo Centauri Carbon 2 printer.
 - Robotics, motor control, drives
 - AI models and tooling, especially local/open models and developer tools
 - Clever engineering write-ups and reverse-engineering stories
-- Practical, useful 3D prints and printing technique (NOT industrial AM
-  market news, funding rounds, or titanium-powder press releases)
+- Practical 3D-printable objects for the home — organizers, repairs, mounts, tools, gadgets, clever household fixes. Prefer genuinely useful prints over decorative models, articulated toys, or figurines.
 - Netherlands news, especially Eindhoven/Brainport region and anything
   touching the labor market, housing, or tech industry there
 - World events with real consequences; EUR/TRY and EUR/USD context
